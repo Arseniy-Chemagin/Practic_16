@@ -1,0 +1,60 @@
+using System;
+
+public class Counter
+{
+    public string Name;
+    public int Value;
+
+    public Counter(string name, int value)
+    {
+        Name = name;
+        Value = value;
+    }
+
+    public static Counter operator +(Counter counter, int amount)
+    {
+        return new Counter(counter.Name, counter.Value + amount);
+    }
+
+    public int this[string index]
+    {
+        get
+        {
+            if (index.Equals("value", StringComparison.OrdinalIgnoreCase))
+            {
+                return Value;
+            }
+            throw new ArgumentException($"Indexer by name '{index}' is not supported.");
+        }
+        set
+        {
+            if (index.Equals("value", StringComparison.OrdinalIgnoreCase))
+            {
+                Value = value;
+            }
+            else
+            {
+                throw new ArgumentException($"Indexer by name '{index}' is not supported.");
+            }
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"{Name}: {Value}";
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var c = new Counter("Счётчик", 10);
+
+        c = c + 5;
+        Console.WriteLine(c);
+
+        c["value"] = 20;
+        Console.WriteLine(c["value"]);
+    }
+}
