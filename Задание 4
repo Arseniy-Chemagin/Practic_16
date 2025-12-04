@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+public class Book
+{
+    private List<string> _chapters = new List<string>();
+
+    public string this[int index]
+    {
+        get
+        {
+            return _chapters[index]; 
+        }
+        set
+        {
+            if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "Индекс главы не может быть отрицательным.");
+
+            if (index == _chapters.Count)
+            {
+                _chapters.Add(value);
+            }
+            else if (index < _chapters.Count)
+            {
+                _chapters[index] = value;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), 
+                    $"Невозможно установить главу по индексу {index}. Главы должны добавляться последовательно (index == {_chapters.Count}) или обновляться существующие (index < {_chapters.Count}).");
+            }
+        }
+    }
+
+    public override string ToString()
+    {
+        if (_chapters.Count == 0) return "Книга не содержит глав.";
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < _chapters.Count; i++)
+            sb.AppendLine($"{i + 1}. {_chapters[i]}");
+        
+        return sb.ToString().TrimEnd();
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var book = new Book();
+        book[0] = "Введение";
+        book[1] = "Глава 1";
+
+        Console.WriteLine(book[0]);
+        Console.WriteLine(book);
+
+        book[2] = "Заключение";
+        Console.WriteLine($"Глава 2: {book[2]}");
+        Console.WriteLine(book);
+
+        try
+        {
+            book[5] = "Несуществующая глава";
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
+        }
+
+        try
+        {
+            Console.WriteLine(book[3]);
+        }
+        catch (IndexOutOfRangeException ex)
+        {
+            Console.WriteLine($"Ошибка: {ex.Message}");
+        }
+
+        Console.ReadKey();
+    }
+}
