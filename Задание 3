@@ -1,0 +1,82 @@
+using System;
+
+public class Temperature
+{
+    private double _celsius;
+
+    public Temperature(double celsius)
+    {
+        _celsius = celsius;
+    }
+
+    public static bool operator >(Temperature t1, Temperature t2)
+    {
+        if (t1 is null || t2 is null)
+        {
+            return false;
+        }
+        return t1._celsius > t2._celsius;
+    }
+
+    public static bool operator <(Temperature t1, Temperature t2)
+    {
+        if (t1 is null || t2 is null)
+        {
+            return false;
+        }
+        return t1._celsius < t2._celsius;
+    }
+
+    public static bool operator ==(Temperature t1, Temperature t2)
+    {
+        if (ReferenceEquals(t1, t2))
+        {
+            return true;
+        }
+        if (t1 is null || t2 is null)
+        {
+            return false;
+        }
+        return t1.Equals(t2);
+    }
+
+    public static bool operator !=(Temperature t1, Temperature t2)
+    {
+        return !(t1 == t2);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Temperature other = (Temperature)obj;
+        return _celsius.Equals(other._celsius);
+    }
+
+    public override int GetHashCode()
+    {
+        return _celsius.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return $"{_celsius}°C";
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var t1 = new Temperature(25);
+        var t2 = new Temperature(30);
+
+        Console.WriteLine(t1);
+        Console.WriteLine(t2 > t1);
+        Console.WriteLine(t1 == new Temperature(25));
+    }
+}
+
